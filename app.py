@@ -28,7 +28,7 @@ def load_data(file):
 
 def analyze_with_ai(df, prompt, key):
     genai.configure(api_key=key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.0-flash')
     
     # Send only necessary context to save speed/tokens
     data_summary = f"Columns: {list(df.columns)}\nSample Data:\n{df.head(3).to_markdown()}"
