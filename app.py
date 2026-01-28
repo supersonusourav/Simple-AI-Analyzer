@@ -20,27 +20,25 @@ def analyze_with_groq(df, user_query, api_key):
     try:
         client = Groq(api_key=api_key)
         
-        # We send the structure of the data to the AI
-        data_context = f"""
-        Dataset Summary:
-        - Columns: {list(df.columns)}
-        - Rows: {len(df)}
-        - First 3 rows:
-        {df.head(3).to_markdown()}
-        """
+        data_context = f"Columns: {list(df.columns)}\nData:\n{df.to_csv(index=False)}"
         
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile", # High performance free model
+            model="llama-3.3-70b-versatile",
             messages=[
-                {"role": "system", "content": "You are a data expert. Answer questions based on the provided CSV context."},
-                {"role": "user", "content": f"{data_context}\n\nQuestion: {user_query}"}
+                {
+                    "role": "system", 
+                    "content": "You are a precise data tool. Answer with the final result only. No explanations, no steps, no introductory text. If the answer is a number, provide only the number."
+                },
+                {
+                    "role": "user", 
+                    "content": f"Dataset:\n{data_context}\n\nQuestion: {user_query}"
+                }
             ],
-            temperature=0.2 # Lower for more factual data analysis
+            temperature=0  # Set to 0 for maximum consistency and precision
         )
         return completion.choices[0].message.content
     except Exception as e:
         return f"Error: {str(e)}"
-
 # --- MAIN APP ---
 st.title("📊 Free Data Insight Engine")
 
