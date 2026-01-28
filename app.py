@@ -43,10 +43,9 @@ def analyze_with_groq(df, user_query, api_key):
 st.title("📊 Simple AI Data Analyzer")
 
 if uploaded_file:
-    # Handle the encoding issue we discussed
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1')
-        st.dataframe(df.all(), use_container_width=True)
+        st.dataframe(df, use_container_width=True, height=400)
         
         query = st.text_input("Ask a question about your data:")
         if st.button("Run AI Analysis"):
