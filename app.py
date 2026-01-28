@@ -27,15 +27,21 @@ def load_data(file):
     return pd.read_csv(file)
 
 def analyze_with_ai(df, prompt, key):
-    genai.configure(api_key=key)
-    model = genai.GenerativeModel('gemini-2.0-flash')
-    
-    # Send only necessary context to save speed/tokens
-    data_summary = f"Columns: {list(df.columns)}\nSample Data:\n{df.head(3).to_markdown()}"
-    full_prompt = f"Context:\n{data_summary}\n\nQuestion: {prompt}\n\nAnswer clearly and concisely."
-    
-    response = model.generate_content(full_prompt)
-    return response.text
+    try:
+        genai.configure(api_key=key)
+        
+        # 'gemini-2.0-flash' is the 2026 standard for speed and reliability
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        
+        data_summary = f"Columns: {list(df.columns)}\nSample Data:\n{df.head(3).to_markdown()}"
+        full_prompt = f"Context:\n{data_summary}\n\nQuestion: {prompt}"
+        
+        response = model.generate_content(full_prompt)
+        return response.text
+    except Exception as e:
+        if "404" in str(e):
+            return "❌ Error: Model not found. Please check if 'gemini-2.0-flash' is available in your region."
+        return f"❌ AI Error: {str(e)}"
 
 # --- MAIN PAGE UI ---
 st.title("📊 AI-Powered Data Insights")
