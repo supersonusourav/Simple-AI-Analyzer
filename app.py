@@ -13,7 +13,7 @@ with st.sidebar:
     GROQ_API_KEY = st.text_input("Groq API Key", type="password", placeholder="gsk_...")
     uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
     st.markdown("---")
-    st.caption("© 2026 Your Name | Powered by Groq 🚀")
+    st.caption("© 2026 Sonu Sourav | Powered by Groq 🚀")
 
 # --- AI ANALYSIS FUNCTION ---
 def analyze_with_groq(df, user_query, api_key):
