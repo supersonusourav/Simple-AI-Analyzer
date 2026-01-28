@@ -46,7 +46,7 @@ if uploaded_file:
     # Handle the encoding issue we discussed
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1')
-        st.dataframe(df.head(5), use_container_width=True)
+        st.dataframe(df.all(), use_container_width=True)
         
         query = st.text_input("Ask a question about your data:")
         if st.button("Run AI Analysis"):
