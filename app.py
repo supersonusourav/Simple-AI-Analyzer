@@ -4,7 +4,7 @@ from groq import Groq
 import io
 
 # --- PAGE SETUP ---
-st.set_page_config(page_title="Free AI Data Analyzer", layout="wide")
+st.set_page_config(page_title="Simple AI Data Analyzer", layout="wide")
 
 # --- SIDEBAR ---
 with st.sidebar:
