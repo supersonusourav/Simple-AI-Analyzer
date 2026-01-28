@@ -27,21 +27,19 @@ def load_data(file):
     return pd.read_csv(file)
 
 def analyze_with_ai(df, prompt, key):
+    genai.configure(api_key=key)
+    model = genai.GenerativeModel('gemini-2.0-flash-lite') # Switched to Lite
+    
+    # TRICK: Only send column names and the first 5 rows to stay under the limit
+    data_summary = f"Columns: {list(df.columns)}\n\nFirst 5 rows:\n{df.head(5).to_csv(index=False)}"
+    
+    full_prompt = f"Analyze this data:\n{data_summary}\n\nUser Question: {prompt}"
+    
     try:
-        genai.configure(api_key=key)
-        
-        # 'gemini-2.0-flash' is the 2026 standard for speed and reliability
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        
-        data_summary = f"Columns: {list(df.columns)}\nSample Data:\n{df.head(3).to_markdown()}"
-        full_prompt = f"Context:\n{data_summary}\n\nQuestion: {prompt}"
-        
         response = model.generate_content(full_prompt)
         return response.text
     except Exception as e:
-        if "404" in str(e):
-            return "❌ Error: Model not found. Please check if 'gemini-2.0-flash' is available in your region."
-        return f"❌ AI Error: {str(e)}"
+        return f"AI Error: {str(e)}"
 
 # --- MAIN PAGE UI ---
 st.title("📊 AI-Powered Data Insights")
