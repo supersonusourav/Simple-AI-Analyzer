@@ -44,7 +44,10 @@ st.title("📊 Simple AI Data Analyzer")
 
 if uploaded_file:
     try:
+        # Load data with common encodings
         df = pd.read_csv(uploaded_file, encoding='latin1')
+        
+        # Display ENTIRE dataset (scrollable window)
         st.dataframe(df, use_container_width=True, height=400)
         
         query = st.text_input("Ask a question about your data:")
@@ -52,7 +55,7 @@ if uploaded_file:
             if not GROQ_API_KEY:
                 st.warning("Please enter your Groq API Key in the sidebar.")
             else:
-                with st.spinner("Groq is thinking at light speed..."):
+                with st.spinner("Groq is thinking..."):
                     result = analyze_with_groq(df, query, GROQ_API_KEY)
                     st.info("### AI Response")
                     st.markdown(result)
