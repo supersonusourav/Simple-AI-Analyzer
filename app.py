@@ -40,7 +40,7 @@ def analyze_with_groq(df, user_query, api_key):
     except Exception as e:
         return f"Error: {str(e)}"
 # --- MAIN APP ---
-st.title("📊 Free Data Insight Engine")
+st.title("📊 Simple AI Data Analyzer")
 
 if uploaded_file:
     # Handle the encoding issue we discussed
