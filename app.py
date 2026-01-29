@@ -82,5 +82,5 @@ if uploaded_file:
 
     except Exception as e:
         st.error(f"Error: {e}")
-    else:
+        else:
     st.info("Please upload a CSV file to begin.")
