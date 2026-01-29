@@ -44,21 +44,38 @@ st.title("📊 Simple AI Data Analyzer")
 
 if uploaded_file:
     try:
-        # Load data with common encodings
+        # Load data
         df = pd.read_csv(uploaded_file, encoding='latin1')
         
-        # Display ENTIRE dataset (scrollable window)
-        st.dataframe(df, use_container_width=True, height=400)
+        # Create Tabs
+        tab1, tab2, tab3 = st.tabs(["📄 Full Dataset", "📈 Visual Insights", "🤖 AI Analyst"])
         
-        query = st.text_input("Ask a question about your data:")
-        if st.button("Run AI Analysis"):
-            if not GROQ_API_KEY:
-                st.warning("Please enter your Groq API Key in the sidebar.")
+        with tab1:
+            # Show entire dataset
+            st.dataframe(df, use_container_width=True, height=400)
+        
+        with tab2:
+            st.subheader("Quick Data Visualization")
+            # Automatically find the first numerical column to plot
+            num_cols = df.select_dtypes(include=['number']).columns.tolist()
+            if num_cols:
+                # Display a simple bar chart of the first numerical column
+                st.bar_chart(df[num_cols[0]])
+                st.caption(f"Showing distribution for: {num_cols[0]}")
             else:
-                with st.spinner("Groq is thinking..."):
-                    result = analyze_with_groq(df, query, GROQ_API_KEY)
-                    st.info("### AI Response")
-                    st.markdown(result)
+                st.warning("No numerical columns found to graph.")
+
+        with tab3:
+            query = st.text_input("Ask a question about your data:")
+            if st.button("Run AI Analysis"):
+                if not GROQ_API_KEY:
+                    st.warning("Please enter your Groq API Key in the sidebar.")
+                else:
+                    with st.spinner("Groq is thinking..."):
+                        result = analyze_with_groq(df, query, GROQ_API_KEY)
+                        st.info("### AI Response")
+                        st.markdown(result)
+                        
     except Exception as e:
         st.error(f"File Loading Error: {e}")
 else:
