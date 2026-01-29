@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from groq import Groq
+import plotly.express as px
 import io
 
 # --- PAGE SETUP ---
@@ -40,62 +41,46 @@ def analyze_with_groq(df, user_query, api_key):
     except Exception as e:
         return f"Error: {str(e)}"
 # --- MAIN APP ---
-st.title("📊 Simple AI Data Analyzer")
+st.title("📊 Flexible AI Data Analyzer")
 
 if uploaded_file:
     try:
-        # Load data
+        # Load the full dataset
         df = pd.read_csv(uploaded_file, encoding='latin1')
-        
-        # Create Tabs
-        tab1, tab2, tab3 = st.tabs(["📄 Full Dataset", "📈 Visual Insights", "🤖 AI Analyst"])
-        
-        with tab1:
-            # Show entire dataset
-            st.dataframe(df, use_container_width=True, height=400)
-        
-        with tab2:
-    st.subheader("Project Ratings & Team Members")
-    
-    # Identify key columns (Adjust 'Project Name', 'Rating', and 'Member' to match your CSV headers)
-    # Assuming standard names, but we can make it flexible
-    cols = df.columns.tolist()
-    
-    # Find the best columns to use
-    name_col = st.selectbox("Select Project Name Column", options=cols)
-    rating_col = st.selectbox("Select Rating Column", options=cols, index=min(1, len(cols)-1))
-    member_col = st.selectbox("Select Member/Team Column", options=cols, index=min(2, len(cols)-1))
+        cols = df.columns.tolist()
 
-    if name_col and rating_col:
-        # Plotly Bar Chart
-        fig = px.bar(
-            df, 
-            x=name_col, 
-            y=rating_col,
-            hover_data=[member_col], # This adds members to the tooltip
-            title=f"Ratings by {name_col}",
-            template="plotly_white",
-            color=rating_col, # Optional: Color bars based on the rating value
-            color_continuous_scale="Viridis"
-        )
-        
-        # To make the chart look better
-        fig.update_layout(xaxis_tickangle=-45) # Tilt project names if they are long
-        
-        st.plotly_chart(fig, use_container_width=True)
+        tab1, tab2, tab3 = st.tabs(["📄 Data", "📈 Charts", "🤖 AI"])
+
+        with tab1:
+            st.dataframe(df, use_container_width=True, height=400)
+
+        with tab2:
+            st.subheader("Dynamic Charting")
+            # Side-by-side selection for a cleaner look
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                x_axis = st.selectbox("X-Axis (Labels)", options=cols, index=0)
+            with c2:
+                y_axis = st.selectbox("Y-Axis (Values)", options=cols, index=min(1, len(cols)-1))
+            with c3:
+                tooltip = st.selectbox("Tooltip (Team Members)", options=cols, index=min(2, len(cols)-1))
+
+            if x_axis and y_axis:
+                fig = px.bar(
+                    df, x=x_axis, y=y_axis,
+                    hover_data=[tooltip],
+                    color=y_axis,
+                    color_continuous_scale="RdYlGn", # Red-Yellow-Green scale
+                    template="plotly_white"
+                )
+                fig.update_layout(xaxis_tickangle=-45)
+                st.plotly_chart(fig, use_container_width=True)
 
         with tab3:
-            query = st.text_input("Ask a question about your data:")
-            if st.button("Run AI Analysis"):
-                if not GROQ_API_KEY:
-                    st.warning("Please enter your Groq API Key in the sidebar.")
-                else:
-                    with st.spinner("Groq is thinking..."):
-                        result = analyze_with_groq(df, query, GROQ_API_KEY)
-                        st.info("### AI Response")
-                        st.markdown(result)
-                        
+            # AI Logic here (from previous steps)
+            st.write("Ask your data questions in the sidebar or here!")
+
     except Exception as e:
-        st.error(f"File Loading Error: {e}")
-else:
+        st.error(f"Error: {e}")
+    else:
     st.info("Please upload a CSV file to begin.")
