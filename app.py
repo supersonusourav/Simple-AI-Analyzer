@@ -55,15 +55,34 @@ if uploaded_file:
             st.dataframe(df, use_container_width=True, height=400)
         
         with tab2:
-            st.subheader("Quick Data Visualization")
-            # Automatically find the first numerical column to plot
-            num_cols = df.select_dtypes(include=['number']).columns.tolist()
-            if num_cols:
-                # Display a simple bar chart of the first numerical column
-                st.bar_chart(df[num_cols[0]])
-                st.caption(f"Showing distribution for: {num_cols[0]}")
-            else:
-                st.warning("No numerical columns found to graph.")
+    st.subheader("Project Ratings & Team Members")
+    
+    # Identify key columns (Adjust 'Project Name', 'Rating', and 'Member' to match your CSV headers)
+    # Assuming standard names, but we can make it flexible
+    cols = df.columns.tolist()
+    
+    # Find the best columns to use
+    name_col = st.selectbox("Select Project Name Column", options=cols)
+    rating_col = st.selectbox("Select Rating Column", options=cols, index=min(1, len(cols)-1))
+    member_col = st.selectbox("Select Member/Team Column", options=cols, index=min(2, len(cols)-1))
+
+    if name_col and rating_col:
+        # Plotly Bar Chart
+        fig = px.bar(
+            df, 
+            x=name_col, 
+            y=rating_col,
+            hover_data=[member_col], # This adds members to the tooltip
+            title=f"Ratings by {name_col}",
+            template="plotly_white",
+            color=rating_col, # Optional: Color bars based on the rating value
+            color_continuous_scale="Viridis"
+        )
+        
+        # To make the chart look better
+        fig.update_layout(xaxis_tickangle=-45) # Tilt project names if they are long
+        
+        st.plotly_chart(fig, use_container_width=True)
 
         with tab3:
             query = st.text_input("Ask a question about your data:")
