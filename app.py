@@ -4,7 +4,7 @@ from groq import Groq
 import plotly.express as px
 
 # --- PAGE SETUP ---
-st.set_page_config(page_title="DataInsight AI", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Simplified Analytics", page_icon="📊", layout="wide")
 
 # Custom CSS for a clean, professional aesthetic
 st.markdown("""
@@ -23,7 +23,7 @@ with st.sidebar:
     uploaded_file = st.file_uploader("Upload Dataset (CSV)", type=["csv"])
     st.divider()
     # Your Copyright
-    st.caption("© 2026 Sonu Sourav | Secure Data Systems 🚀")
+    st.caption("© 2026 Data Scientist: Mr. Sonu Sourav | Powered by: Groq 🚀")
 
 # --- PROFESSIONAL AI FUNCTION ---
 def analyze_with_groq(df, user_query, api_key):
@@ -54,7 +54,7 @@ def analyze_with_groq(df, user_query, api_key):
         return f"System Error: {str(e)}"
 
 # --- MAIN INTERFACE ---
-st.title("📊 DataInsight AI")
+st.title("📊 Simplified Analytics")
 st.markdown("Automated Visual Analytics and Professional Data Consultancy.")
 
 if uploaded_file:
