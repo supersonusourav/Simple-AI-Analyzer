@@ -35,6 +35,14 @@ def analyze_with_groq(df, user_query, api_key):
         5. VERIFICATION: Before answering, double-check your list for each query.
 
         OUTPUT FORMAT: Provide a clear bulleted list. If no projects match the criteria, say 'No joint projects found in the record.'
+        STRICT PROTOCOL:
+        1. SEPARATION: Treat 'Team Members' as a fixed list. 'And', '&', and commas are separators.
+        2. MANDATORY CHECK: When checking for two people (e.g., Rajesh and Ramya):
+           - For EVERY project, you must ask: "Is Name A in this cell?" AND "Is Name B in this cell?"
+           - If the answer to BOTH is not 'YES', you MUST exclude that project.
+        3. NO ASSOCIATIONS: Do not assume that because people work in the same 'Category' or 'Complexity' that they worked together. 
+        4. VERIFICATION STEP: Before finalizing your list, look at the 'Team Members' of your chosen projects one last time. If you see 'Ramya' but not 'Rajesh', REMOVE it immediately.
+        5. HONESTY: If only 2 projects match, only list 2. Do not try to find a third one to be 'helpful'.
         """
         
         # Injecting full CSV content as a string
