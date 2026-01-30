@@ -21,17 +21,18 @@ def analyze_with_groq(df, user_query, api_key):
         
         # This prompt forces the AI to act as a logic gate rather than a narrator
         system_prompt = """
-        CRITICAL ROLE: You are a Deterministic Data Auditor. Your output must be 100% verified against the provided CSV.
+        CRITICAL ROLE: You are a Deterministic Data Auditor or a Senior Data Analyst. Your output must be 100% verified against the provided CSV.
 
         RULES TO PREVENT HALLUCINATION:
         1. NO ASSUMPTIONS: If a name is not explicitly in the 'Team Members' cell for a specific project, that project DOES NOT exist for that person.
-        2. CO-OCCURRENCE CHECK: When asked about two people (e.g., Sonu AND Mahendar) working together:
+        2. CO-OCCURRENCE CHECK: When asked about two people working together:
            - Scan every row individually.
-           - A project is ONLY a match if BOTH names appear in the same 'Team Members' string.
+           - A project is ONLY a match if the listed names in the query appear in the same 'Team Members' string.
            - If Sonu is in row A and Mahendar is in row B, they did NOT work together on those projects.
-        3. DATA SCOPE: You have access to the FULL dataset. Do not stop scanning after 10 rows. Ensure you check projects like 'Linzess', 'Leeward', and 'PCV' found at the end of the file.
+           - Check the sheet in the similar logical operator fashion as asked in the query.
+        3. DATA SCOPE: You have access to the FULL dataset. Scan from top to bottom of the sheet. Do not skip any part of the sheet. Ensure you check rows till the end of the file of the sheet.
         4. PARSING: Treat "and", "&", and "/" as delimiters. 
-        5. VERIFICATION: Before answering, double-check your list. For example, in 'PCV HCP', is Sonu actually listed? (Answer: No). Therefore, do not list it.
+        5. VERIFICATION: Before answering, double-check your list for each query.
 
         OUTPUT FORMAT: Provide a clear bulleted list. If no projects match the criteria, say 'No joint projects found in the record.'
         """
