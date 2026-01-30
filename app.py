@@ -38,16 +38,17 @@ def analyze_with_groq(df, user_query, api_key):
             "provide that number immediately, followed by a very brief professional context if necessary. "
             "Avoid slang, introductory filler, or conversational chatter."
         )
-
-        data_full_context = f"Structure: {list(df.columns)}\nFull Data Content:\n{df.to_csv(index=False)}"
+        
+        # OPTIMIZATION 1: Passing the FULL dataframe to the AI instead of head(10)
+        data_context = f"Structure: {list(df.columns)}\nFull Dataset:\n{df.to_csv(index=False)}"
         
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"Data Context:\n{data_full_context}\n\nClient Query: {user_query}"}
+                {"role": "user", "content": f"Dataset:\n{data_context}\n\nQuestion: {user_query}"}
             ],
-            temperature=0
+            temperature=0  # Deterministic for data accuracy
         )
         return completion.choices[0].message.content
     except Exception as e:
@@ -60,10 +61,13 @@ st.markdown("Automated Visual Analytics and Professional Data Consultancy.")
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1')
-        df = df.replace(to_replace=r'\s+and\s+', value=', ', regex=True)
+        
+        # OPTIMIZATION 2: Standardize 'and' as a comma (handles "Sonu and Vinaya" and "Sonu, and Vinaya")
+        df = df.replace(to_replace=r',?\s+and\s+', value=', ', regex=True)
         
         cols = df.columns.tolist()
 
+        # Tabs for Navigation
         tab1, tab2, tab3 = st.tabs(["📄 Dataset Explorer", "📈 Visual Analytics", "💼 AI Consultant"])
 
         with tab1:
@@ -71,6 +75,7 @@ if uploaded_file:
 
         with tab2:
             st.subheader("Interactive Visualizations")
+            # Minimal axis selector
             c1, c2, c3 = st.columns(3)
             with c1: x_axis = st.selectbox("X-Axis (Labels)", options=cols, index=0)
             with c2: y_axis = st.selectbox("Y-Axis (Values)", options=cols, index=min(1, len(cols)-1))
@@ -95,4 +100,5 @@ if uploaded_file:
     except Exception as e:
         st.error(f"Data Processing Error: {e}")
 else:
+    # Clean landing page
     st.info("👋 Please upload a CSV file in the sidebar to initialize the analysis engine.")
