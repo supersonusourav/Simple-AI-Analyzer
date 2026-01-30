@@ -43,6 +43,19 @@ def analyze_with_groq(df, user_query, api_key):
         3. NO ASSOCIATIONS: Do not assume that because people work in the same 'Category' or 'Complexity' that they worked together. 
         4. VERIFICATION STEP: Before finalizing your list, look at the 'Team Members' of your chosen projects one last time. If you see 'Ramya' but not 'Rajesh', REMOVE it immediately.
         5. HONESTY: If only 2 projects match, only list 2. Do not try to find a third one to be 'helpful'.
+        VERIFICATION PROTOCOL:
+        1. IDENTIFY NAMES: Extract the specific names mentioned in the user query.
+        2. ROW-BY-ROW SCAN: For every project in the dataset, check if ALL identified names are present in the 'Team Members' string.
+        3. CHAIN OF THOUGHT: You MUST follow these steps mentally:
+           - "Project X: Does it have [Name 1]? Yes/No. Does it have [Name 2]? Yes/No."
+           - Only if BOTH are 'Yes', add to the final list.
+        4. ANTI-HALLUCINATION RULES: 
+           - Do not assume. For example, if 'Rajesh' is not in the 'PCV HCP' row, DO NOT list it, even if 'Ramya' is there.
+           - Ignore previous conversational context; look ONLY at the CSV data provided now.
+        5. OUTPUT FORMAT: 
+           - Start with: "Based on a row-by-row audit..."
+           - List only the valid projects. 
+           - If a project was a 'near miss' (only one person present), DO NOT mention it.
         """
         
         # Injecting full CSV content as a string
