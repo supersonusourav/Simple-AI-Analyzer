@@ -20,7 +20,7 @@ def analyze_with_gemini(df, user_query, api_key):
         genai.configure(api_key=api_key)
         
         # Use 'gemini-1.5-flash' - ensured compatibility
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         system_prompt = """
         ROLE: You are a Forensic Data Auditor. 
