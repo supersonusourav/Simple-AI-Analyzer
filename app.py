@@ -33,7 +33,7 @@ def analyze_with_groq(df, user_query, api_key):
            - DO NOT list a project if only one person is mentioned.
            - DO NOT list a project based on memory; use ONLY the provided CSV text.
         4. ACCURACY: If a project like 'PCV HCP' has Mahendar but NOT Sonu, you MUST NOT include it in a joint list.
-        5. OUTPUT: Provide the project names as a bulleted list. If no matches exist, state that clearly. Avoid conversational filler. Use table format whenever needed.
+        5. OUTPUT: Provide the project names as a bulleted list. If no matches exist, state that clearly. Avoid conversational filler. Use table format whenever needed. Summarize the output keeping directly the answer of the query asked.
         """
         
         # Inject the full dataset context
