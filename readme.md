@@ -21,7 +21,7 @@
 * **Frontend:** [Streamlit](https://streamlit.io/)
 * **Data Handling:** [Pandas](https://pandas.pydata.org/)
 * **Visualizations:** [Plotly Express](https://plotly.com/python/plotly-express/)
-* **Large Language Model:** [Groq](https://groq.com/) (Llama-3.3-70b-versatile)
+* **Large Language Model:** [Gemini](https://groq.com/](https://aistudio.google.com/app/api-keys) (Gemini 2.5 Flash)
 
 
 
