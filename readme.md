@@ -7,7 +7,7 @@
 
 
 ## 🌟 Overview
-**Simplified Analytics** is a high-performance web application designed to bridge the gap between raw data and actionable business intelligence. By integrating **Streamlit** for a seamless user interface and the **Groq Llama-3 70B** model for expert-level analysis, this tool allows users to explore, visualize, and query datasets in a professional consultant-grade environment.
+**Simplified Analytics** is a high-performance web application designed to bridge the gap between raw data and actionable business intelligence. By integrating **Streamlit** for a seamless user interface and the **Gemini 2.5 Flash** model for expert-level analysis, this tool allows users to explore, visualize, and query datasets in a professional consultant-grade environment.
 
 ## 🚀 Key Features
 * **📄 Dataset Explorer:** Full-scale interactive data viewing with high-performance CSV parsing.
@@ -28,7 +28,7 @@
 ---
 
 ## 📖 How to Use
-1.  **API Key:** Obtain your API key from the [Groq Cloud Console](https://console.groq.com/).
+1.  **API Key:** Obtain your API key from the [Google AI Studio](https://aistudio.google.com/app/api-keys).
 2.  **Configuration:** Enter your key in the **🛠️ Configuration** section in the sidebar.
 3.  **Upload:** Upload any `.csv` file.
 4.  **Explore:** * Use the **Dataset Explorer** to verify your data.
