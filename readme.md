@@ -3,6 +3,7 @@
 
 **Live Demo:** [🚀 Click here to access the application](https://simple-ai-analyzer.streamlit.app/)
 
+<img width="1805" height="562" alt="image" src="https://github.com/user-attachments/assets/b7dfd02c-a52c-407f-8a88-769de99b5edb" />
 
 
 ## 🌟 Overview
